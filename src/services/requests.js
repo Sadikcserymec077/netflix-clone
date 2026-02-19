@@ -1,14 +1,16 @@
-const API_KEY = "d8ba4aadf6f406f7b93d60543ef50869";
+const API_KEY = "b43e3ec";
 
+// OMDB doesn't support discovery like TMDB. 
+// We will use specific search terms to mimic the categories.
 const requests = {
-    fetchTrending: `/trending/all/week?api_key=${API_KEY}&language=en-US`,
-    fetchNetflixOriginals: `/discover/tv?api_key=${API_KEY}&with_networks=213`,
-    fetchTopRated: `/movie/top_rated?api_key=${API_KEY}&language=en-US`,
-    fetchActionMovies: `/discover/movie?api_key=${API_KEY}&with_genres=28`,
-    fetchComedyMovies: `/discover/movie?api_key=${API_KEY}&with_genres=35`,
-    fetchHorrorMovies: `/discover/movie?api_key=${API_KEY}&with_genres=27`,
-    fetchRomanceMovies: `/discover/movie?api_key=${API_KEY}&with_genres=10749`,
-    fetchDocumentaries: `/discover/movie?api_key=${API_KEY}&with_genres=99`,
+    fetchTrending: `?apikey=${API_KEY}&s=marvel&type=movie`,
+    fetchNetflixOriginals: `?apikey=${API_KEY}&s=stranger things&type=series`,
+    fetchTopRated: `?apikey=${API_KEY}&s=harry potter&type=movie`,
+    fetchActionMovies: `?apikey=${API_KEY}&s=mission impossible&type=movie`,
+    fetchComedyMovies: `?apikey=${API_KEY}&s=hangover&type=movie`,
+    fetchHorrorMovies: `?apikey=${API_KEY}&s=conjuring&type=movie`,
+    fetchRomanceMovies: `?apikey=${API_KEY}&s=notebook&type=movie`,
+    fetchDocumentaries: `?apikey=${API_KEY}&s=planet earth&type=series`,
 };
 
 export default requests;

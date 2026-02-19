@@ -10,14 +10,26 @@ function Banner() {
     useEffect(() => {
         async function fetchData() {
             try {
+                // OMDB search for 'stranger things' or generic
                 const request = await axios.get(requests.fetchNetflixOriginals);
-                setMovie(
-                    request.data.results[
-                    Math.floor(Math.random() * request.data.results.length)
-                    ]
-                );
+
+                if (request.data.Search && request.data.Search.length > 0) {
+                    // Pick a random movie from the search result
+                    setMovie(
+                        request.data.Search[
+                        Math.floor(Math.random() * request.data.Search.length)
+                        ]
+                    );
+                }
+
             } catch (error) {
                 console.error("Failed to fetch banner movie:", error);
+
+                // Fallback to mock data
+                import("../../services/mockData").then((module) => {
+                    const mockMovies = module.default;
+                    setMovie(mockMovies[Math.floor(Math.random() * mockMovies.length)]);
+                });
             }
         }
         fetchData();
@@ -33,14 +45,14 @@ function Banner() {
             style={{
                 backgroundSize: "cover",
                 backgroundImage: `url(
-                    "https://image.tmdb.org/t/p/original/${movie?.backdrop_path}"
+                    "${movie?.Poster && movie.Poster !== 'N/A' ? movie.Poster : 'https://upload.wikimedia.org/wikipedia/commons/c/cd/Black_flag.svg'}"
                 )`,
                 backgroundPosition: "center center",
             }}
         >
             <div className="banner__contents">
                 <h1 className="banner__title">
-                    {movie?.title || movie?.name || movie?.original_name}
+                    {movie?.Title || movie?.name || movie?.original_name}
                 </h1>
 
                 <div className="banner__buttons">
@@ -48,7 +60,11 @@ function Banner() {
                     <button className="banner__button">My List</button>
                 </div>
 
-                <h1 className="banner__description">{truncate(movie?.overview, 150)}</h1>
+                <h1 className="banner__description">
+                    {/* OMDB Search result doesn't give full Plot/Overview, only Detail does. 
+                        We might just show 'Click to see more' or handle empty string if not available */}
+                    {truncate(movie?.Plot || movie?.overview || "Watch this amazing title now on Netflix.", 150)}
+                </h1>
             </div>
 
             <div className="banner--fadeBottom" />

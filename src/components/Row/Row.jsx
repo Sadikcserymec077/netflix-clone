@@ -3,8 +3,6 @@ import React, { useState, useEffect } from "react";
 import axios from "../../services/axios";
 import "./Row.css";
 
-const base_url = "https://image.tmdb.org/t/p/original/";
-
 function Row({ title, fetchUrl, isLargeRow }) {
     const [movies, setMovies] = useState([]);
 
@@ -12,11 +10,22 @@ function Row({ title, fetchUrl, isLargeRow }) {
         async function fetchData() {
             try {
                 const request = await axios.get(fetchUrl);
-                setMovies(request.data.results);
+                // OMDB returns data in 'Search' array
+                if (request.data.Search) {
+                    setMovies(request.data.Search);
+                } else if (request.data.Error) {
+                    console.error("OMDB Error:", request.data.Error);
+                }
                 return request;
             } catch (error) {
                 console.error("Failed to fetch movies for row:", title, error);
-                setMovies([]);
+
+                // Fallback to mock data if API fails (e.g. ISP block)
+                import("../../services/mockData").then((module) => {
+                    const mockMovies = module.default;
+                    // Shuffle or simulate different content per row
+                    setMovies(mockMovies);
+                });
             }
         }
         fetchData();
@@ -29,20 +38,20 @@ function Row({ title, fetchUrl, isLargeRow }) {
             <div className="row__posters">
                 {movies.map(
                     (movie) =>
-                        ((isLargeRow && movie.poster_path) ||
-                            (!isLargeRow && movie.backdrop_path)) && (
+                        // OMDB uses 'Poster' and 'Type'
+                        // Only render if there is a poster
+                        movie.Poster && movie.Poster !== "N/A" && (
                             <div
-                                key={movie.id}
+                                key={movie.imdbID || movie.id} // OMDB uses imdbID
                                 className={`row__posterContainer ${isLargeRow && "row__posterContainerLarge"}`}
                             >
                                 <img
                                     className={`row__poster ${isLargeRow && "row__posterLarge"}`}
-                                    src={`${base_url}${isLargeRow ? movie.poster_path : movie.backdrop_path
-                                        }`}
-                                    alt={movie.name || movie.title || movie.original_name}
+                                    src={movie.Poster} // OMDB gives full URL
+                                    alt={movie.Title || movie.name}
                                 />
                                 <div className="row__posterName">
-                                    {movie.name || movie.title || movie.original_name}
+                                    {movie.Title || movie.name}
                                 </div>
                             </div>
                         )

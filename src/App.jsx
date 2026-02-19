@@ -1,37 +1,36 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
-import Row from "./components/Row/Row";
-import requests from "./services/requests";
-import Banner from "./components/Banner/Banner";
-import Nav from "./components/Nav/Nav";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home/Home";
+import Login from "./pages/Login/Login";
+import Signup from "./pages/Signup/Signup";
+import { auth } from "./firebase";
+import { onAuthStateChanged } from "firebase/auth";
 
 function App() {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (userAuth) => {
+      if (userAuth) {
+        setUser(userAuth);
+      } else {
+        setUser(null);
+      }
+    });
+
+    return unsubscribe;
+  }, []);
+
   return (
     <div className="app">
-      <Router>
+      <Router basename="/netflix-clone">
         <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
           <Route
-            exact
             path="/"
-            element={
-              <>
-                <Nav />
-                <Banner />
-                <Row
-                  title="NETFLIX ORIGINALS"
-                  fetchUrl={requests.fetchNetflixOriginals}
-                  isLargeRow
-                />
-                <Row title="Trending Now" fetchUrl={requests.fetchTrending} />
-                <Row title="Top Rated" fetchUrl={requests.fetchTopRated} />
-                <Row title="Action Movies" fetchUrl={requests.fetchActionMovies} />
-                <Row title="Comedy Movies" fetchUrl={requests.fetchComedyMovies} />
-                <Row title="Horror Movies" fetchUrl={requests.fetchHorrorMovies} />
-                <Row title="Romance Movies" fetchUrl={requests.fetchRomanceMovies} />
-                <Row title="Documentaries" fetchUrl={requests.fetchDocumentaries} />
-              </>
-            }
+            element={user ? <Home /> : <Login />}
           />
         </Routes>
       </Router>
