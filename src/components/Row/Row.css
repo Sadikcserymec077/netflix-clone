@@ -1,0 +1,61 @@
+.row {
+    margin-left: 20px;
+    color: white;
+    margin-bottom: 2rem;
+}
+
+.row__posters {
+    display: flex;
+    overflow-y: hidden;
+    overflow-x: scroll;
+    padding: 20px;
+    /* Hide scrollbars */
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.row__posters::-webkit-scrollbar {
+    display: none;
+}
+
+.row__posterContainer {
+    margin-right: 15px;
+    transition: transform 450ms;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: min-content;
+    /* Constrain width to the image */
+}
+
+.row__posterContainer:hover {
+    transform: scale(1.08);
+    z-index: 10;
+    position: relative;
+}
+
+.row__poster {
+    width: auto;
+    height: 200px;
+    border-radius: 4px;
+    object-fit: cover;
+}
+
+.row__posterLarge {
+    height: 350px;
+}
+
+.row__posterName {
+    font-size: 0.8rem;
+    color: #e5e5e5;
+    text-align: center;
+    margin-top: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+}

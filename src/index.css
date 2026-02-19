@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --netflix-red: #e50914;
+  --netflix-black: #111;
+  --netflix-dark-gray: #141414;
+  --netflix-light-gray: #e5e5e5;
+  --btn-white: #fff;
+  --font-base: 'Outfit', sans-serif;
+}
+
+* {
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--netflix-black);
+  color: #fff;
+}
+
+button {
+  cursor: pointer;
+  outline: none;
+  border: none;
+}

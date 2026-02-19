@@ -1,0 +1,4 @@
+.app {
+  background-color: var(--netflix-black);
+  min-height: 100vh;
+}
